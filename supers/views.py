@@ -44,3 +44,16 @@ def super_details(request, pk):
     elif request.method == 'DELETE':
         super.delete()
         return Response(status = status.HTTP_204_NO_CONTENT)
+
+
+api_view(['GET'])
+def display_chosen_type(request):
+
+    supers_list = Super.objects.all()
+    super_param = request.query_params.get('type')
+    if super_param:
+        super_param = supers_list.filter(super_type__type=super_param)
+
+    serializer = SuperSerializer(supers_list, many = True)
+    return Response(serializer.data)
+
